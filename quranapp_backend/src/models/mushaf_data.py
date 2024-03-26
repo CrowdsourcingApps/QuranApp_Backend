@@ -27,10 +27,21 @@ class AyahPartsData(BaseModel):
 class PageImagesDetailData(BaseModel):
     page_number: int
     light_mode_link: str
-    dark_mode_link: str | None = None
+    dark_mode_link: str
 
 
 class PageImagesData(BaseModel):
     riwayah: RiwayahEnum
     publisher: PublisherEnum
     pages: list[PageImagesDetailData]
+
+
+class SurahInMushafDetailData(BaseModel):
+    surah_number: int
+    page_number: int
+
+
+class SurahsInMushafData(BaseModel):
+    riwayah: RiwayahEnum
+    publisher: PublisherEnum
+    surahs: list[SurahInMushafDetailData]

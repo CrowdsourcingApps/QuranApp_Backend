@@ -38,6 +38,16 @@ def user2(db_session):
     return USER_2
 
 
+@pytest.fixture
+def mushaf(db_session):
+    from src.services import mushafs as mushafs_service
+    from src.dal.enums import RiwayahEnum, PublisherEnum
+    mushaf_object = mushafs_service.get_mushaf_if_exists(db_session, RiwayahEnum.QALOON, PublisherEnum.MADINA)
+    if not mushaf_object:
+        mushaf_object = mushafs_service.create_mushaf(db_session, RiwayahEnum.QALOON, PublisherEnum.MADINA)
+    return mushaf_object
+
+
 def get_user(db_session, user, user_index):
     from src.dal.models import User
     from src.services.users import create_user
@@ -59,7 +69,7 @@ def get_user(db_session, user, user_index):
 def pytest_unconfigure(config):  # noqa
     from sqlalchemy.orm import joinedload
     from src.dal.database import SessionLocal
-    from src.dal.models import Ayah, AyahPart, AyahPartText, MushafPage, AyahPartMarker
+    from src.dal.models import Ayah, AyahPart, AyahPartText, MushafPage, AyahPartMarker, Surah, SurahInMushaf
     from src.services.users import delete_user
     global USER_1, USER_2
 
@@ -90,8 +100,9 @@ def pytest_unconfigure(config):  # noqa
              "Test text data upload. Part 1", "Text that must not be created", "Test text data upload. Updated text"])
         ).delete()
 
-        db.query(MushafPage).filter(MushafPage.index.in_([5000, 5001])).delete()
-
+        db.query(SurahInMushaf).filter(SurahInMushaf.surah_number >= 500).delete()
+        db.query(Surah).filter(Surah.id >= 500).delete()
+        db.query(MushafPage).filter(MushafPage.index >= 5000).delete()
         db.query(Ayah).filter(Ayah.ayah_in_surah_number >= 1000).delete()
 
         db.commit()
