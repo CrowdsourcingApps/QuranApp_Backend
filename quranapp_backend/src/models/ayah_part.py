@@ -28,4 +28,5 @@ class MushafPageAyahPart(AyahPartBase):
     id: uuid.UUID
     text: str | NoneType
     text_id: uuid.UUID | NoneType
+    audio_link: str | NoneType
     markers: list[AyahPartMarker]

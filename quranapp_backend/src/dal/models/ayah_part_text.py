@@ -13,3 +13,4 @@ class AyahPartText(Base):
     text = Column(String, nullable=False)
 
     ayah_parts = relationship("AyahPart", back_populates="text")
+    reciter_audios = relationship("ReciterAudio", back_populates="text")
